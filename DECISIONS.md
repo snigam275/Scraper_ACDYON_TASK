@@ -1,6 +1,9 @@
 # Architectural Decisions & Technical Strategy (`DECISIONS.md`)
 
-**Candidate Name**: Shrey Nigam  
+**Candidate Name**: Shreya Nigam  
+**Registration No.**: 12309320  
+**Email**: nigamshreya21@gmail.com  
+**University**: Lovely Professional University  
 **Track Selected**: Part 1 — Resilient Data Ingestion Pipeline  
 **Live Deployed Application**: [https://scraper-2qh7.onrender.com/](https://scraper-2qh7.onrender.com/)  
 **GitHub Repository**: [https://github.com/snigam275/Scraper_ACDYON_TASK](https://github.com/snigam275/Scraper_ACDYON_TASK)
