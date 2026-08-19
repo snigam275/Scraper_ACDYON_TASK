@@ -1,0 +1,15 @@
+# Virtual environment — never push this to GitHub
+# (it's ~30 MB of libraries that pip can reinstall from requirements.txt)
+venv/
+
+# Python bytecode cache files
+__pycache__/
+*.pyc
+
+# IDE / editor settings
+.vscode/
+.idea/
+
+# OS junk files
+.DS_Store
+Thumbs.db

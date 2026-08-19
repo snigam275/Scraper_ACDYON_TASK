@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--
+        WHAT: This is the HTML template for our job listings page.
+        WHY:  Flask uses Jinja2 templating — we write normal HTML but can
+              insert Python data using special double-brace and tag syntax.
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remote Job Listings — Live Feed</title>
+    <meta name="description" content="Browse live remote job listings from Remotive — search, filter by category, and apply directly.">
+
+    <!--
+        WHY Google Fonts?  The default browser font (Times New Roman) looks
+        dated. "Inter" is a clean, modern, free font that's easy to read.
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* ================================================================
+           CSS STYLES — all in one place for simplicity
+           ================================================================ */
+
+        /* --- RESET & BASE --- */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* --- ROOT VARIABLES (Design Tokens) --- */
+        /* WHY: Define all colors/sizes once. Change a variable here and it
+           updates the entire page automatically. */
+        /* --- ROOT VARIABLES (Design Tokens) --- */
+        /* --- ROOT VARIABLES (Design Tokens) --- */
+        /* Theme: Light Creamish Yellow (lightest shade of yellow+white) + Greenish + Blueish */
+        /* --- ROOT VARIABLES (Strict 3 Colors: Creamish Yellow + Greenish + Blueish) --- */
+        :root {
+            /* 1. Creamish Yellow Base */
+            --bg-body: #fffdf5;          /* Lightest creamish yellow background */
+            --bg-card: #ffffff;          /* Crisp white card surface */
+            --bg-card-hover: #ffffff;
+            --bg-input: #ffffff;
+            --border-cream: #f3ead3;     /* Warm cream border */
+
+            /* 2. Greenish Accents */
+            --green-primary: #059669;   /* Emerald green */
+            --green-light: #10b981;     /* Vibrant mint green */
+            --green-bg: #ecfdf5;        /* Light emerald green tint */
+            --green-border: #a7f3d0;
+
+            /* 3. Blueish Primary & Text */
+            --text-primary: #0f172a;    /* Deep slate navy for main text */
+            --text-secondary: #475569;  /* Elegant slate secondary text */
+            --text-dim: #64748b;        /* Muted slate text */
+            --blue-primary: #0284c7;    /* Oceanic blue for buttons & links */
+            --blue-light: #38bdf8;      /* Sky blue accent */
+            --blue-bg: #e0f2fe;         /* Light sky blue tint */
+            --blue-border: #bae6fd;
+
+            --radius: 16px;
+            --radius-sm: 8px;
+            --shadow-card: 0 8px 30px rgba(180, 140, 60, 0.08), 0 2px 8px rgba(0, 0, 0, 0.03);
+            --shadow-hover: 0 16px 40px rgba(2, 132, 199, 0.15), 0 4px 12px rgba(0, 0, 0, 0.05);
+            --transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-body);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            /* Tri-color ambient background pattern: Creamish Yellow + Greenish + Blueish */
+            background-image:
+                radial-gradient(ellipse 80% 60% at 50% -20%, rgba(254, 240, 138, 0.55), transparent),
+                radial-gradient(ellipse 60% 50% at 90% 70%, rgba(209, 250, 229, 0.5), transparent),
+                radial-gradient(ellipse 60% 50% at 10% 40%, rgba(224, 242, 254, 0.5), transparent);
+            background-attachment: fixed;
+        }
+
+        /* --- HERO / HEADER SECTION --- */
+        .hero {
+            text-align: center;
+            padding: 3.5rem 1.5rem 1.5rem;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        /* Student attribution badge */
+        .student-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: var(--green-bg);
+            color: var(--green-primary);
+            border: 1px solid var(--green-border);
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.35rem 0.9rem;
+            border-radius: 100px;
+            margin-bottom: 1rem;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.2;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        /* Gradient text effect: Greenish -> Blueish */
+        .gradient-text {
+            background: linear-gradient(135deg, var(--green-primary) 0%, var(--blue-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 1-Line Dynamic Subtitle Badge */
+        .dynamic-sub-bar {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--blue-bg);
+            color: var(--blue-primary);
+            border: 1px solid var(--blue-border);
+            border-radius: 50px;
+            padding: 0.45rem 1.2rem;
+            font-size: 0.83rem;
+            font-weight: 600;
+            white-space: nowrap;
+            margin-bottom: 0.85rem;
+            box-shadow: 0 2px 10px rgba(2, 132, 199, 0.06);
+        }
+
+        .pulse-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--green-light);
+            box-shadow: 0 0 8px var(--green-light);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50%      { opacity: 0.4; transform: scale(0.8); }
+        }
+
+        .hero-tagline {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            max-width: 800px;
+            margin: 0 auto 1.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* --- PLATFORM OVERVIEW SECTION (Show before listings) --- */
+        .platform-overview {
+            max-width: 1100px;
+            margin: 1rem auto 2rem;
+            padding: 0 1.5rem;
+        }
+
+        .overview-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .overview-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .overview-header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .feature-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-cream);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-card);
+            transition: transform var(--transition), box-shadow var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--blue-border);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.4rem;
+        }
+
+        .feature-card p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .action-bar {
+            text-align: center;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.8rem;
+            background: linear-gradient(135deg, var(--blue-primary), var(--green-primary));
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            box-shadow: 0 4px 16px rgba(2, 132, 199, 0.25);
+            transition: transform var(--transition), box-shadow var(--transition);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(5, 150, 105, 0.35);
+        }
+
+        /* --- TOOLBAR (Search + Filter) --- */
+        .toolbar {
+            max-width: 1100px;
+            margin: 1.5rem auto 0;
+            padding: 0 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 240px;
+            position: relative;
+        }
+
+        .search-box::before {
+            content: "🔍";
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.6rem;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.92rem;
+            outline: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+            transition: border-color var(--transition), box-shadow var(--transition);
+        }
+
+        .search-box input:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-dim);
+        }
+
+        /* Category filter dropdown */
+        .filter-select {
+            padding: 0.75rem 1rem;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.92rem;
+            outline: none;
+            cursor: pointer;
+            min-width: 200px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+            transition: border-color var(--transition);
+        }
+
+        .filter-select:focus {
+            border-color: var(--blue);
+        }
+
+        .filter-select option {
+            background: #ffffff;
+            color: var(--text-primary);
+            padding: 0.5rem;
+        }
+
+        /* --- JOB GRID --- */
+        .job-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1rem;
+            max-width: 1100px;
+            margin: 1.5rem auto 0;
+            padding: 0 1.5rem 3rem;
+        }
+
+        /* --- JOB CARD --- */
+        .job-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            box-shadow: var(--shadow-card);
+            transition: transform var(--transition),
+                        box-shadow var(--transition),
+                        border-color var(--transition),
+                        background var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .job-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--blue-border);
+            background: var(--bg-card-hover);
+        }
+
+        /* Top edge accent gradient: Yellowish Gold -> Emerald Green -> Oceanic Blue */
+        .job-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #d97706, #059669, #0284c7);
+            opacity: 0.85;
+            transition: opacity var(--transition);
+        }
+
+        .job-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Top row: logo + title + company */
+        .card-header {
+            display: flex;
+            gap: 0.85rem;
+            align-items: flex-start;
+        }
+
+        .company-logo {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            object-fit: cover;
+            background: #fffdf5;
+            flex-shrink: 0;
+            border: 1px solid var(--border);
+        }
+
+        .logo-placeholder {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #fef08a, #a7f3d0, #bae6fd);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #0f172a;
+            border: 1px solid var(--border);
+        }
+
+        .card-header-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .card-header-text h2 {
+            font-size: 1.02rem;
+            font-weight: 700;
+            line-height: 1.35;
+            color: var(--text-primary);
+        }
+
+        .card-header-text .company-name {
+            font-size: 0.86rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-top: 0.15rem;
+        }
+
+        /* Tags row */
+        .tags-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .tag {
+            font-size: 0.73rem;
+            font-weight: 600;
+            padding: 0.25rem 0.65rem;
+            border-radius: 6px;
+            letter-spacing: 0.01em;
+        }
+
+        .tag-category {
+            background: var(--blue-bg);
+            color: var(--blue);
+            border: 1px solid var(--blue-border);
+        }
+
+        .tag-type {
+            background: var(--green-bg);
+            color: var(--green);
+            border: 1px solid var(--green-border);
+        }
+
+        .tag-location {
+            background: #fffbeb;
+            color: #78350f;
+            border: 1px solid #fef08a;
+        }
+
+        /* Salary row */
+        .salary {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #b45309;
+        }
+
+        /* Bottom row: date + apply button */
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 0.6rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .pub-date {
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            font-weight: 500;
+        }
+
+        .apply-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.55rem 1.2rem;
+            background: linear-gradient(135deg, #0284c7, #2563eb);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            font-size: 0.84rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);
+            transition: background var(--transition),
+                        box-shadow var(--transition),
+                        transform var(--transition);
+        }
+
+        .apply-link:hover {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: #ffffff;
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.35);
+            transform: translateY(-1px);
+        }
+
+        /* Arrow icon */
+        .apply-link::after {
+            content: "→";
+            transition: transform var(--transition);
+        }
+
+        .apply-link:hover::after {
+            transform: translateX(3px);
+        }
+
+        /* --- "NO RESULTS" MESSAGE --- */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 1.5rem;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .empty-state .icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .no-filter-results {
+            display: none;
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--text-secondary);
+            grid-column: 1 / -1;
+        }
+
+        .no-filter-results .icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- FOOTER --- */
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-dim);
+            font-size: 0.78rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer a {
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 500px) {
+            .hero h1  { font-size: 1.8rem; }
+            .toolbar  { flex-direction: column; }
+            .job-grid { grid-template-columns: 1fr; padding: 0 1rem 2rem; }
+            .job-count { margin-left: 0; }
+        }
+
+        /* --- FADE-IN ANIMATION --- */
+        /* Cards slide up and fade in when the page loads */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .job-card {
+            animation: fadeInUp 0.5s ease both;
+        }
+
+        /* Stagger the animation: each card starts slightly later.
+           We use nth-child to give each card a different delay. */
+        .job-card:nth-child(1)  { animation-delay: 0.03s; }
+        .job-card:nth-child(2)  { animation-delay: 0.06s; }
+        .job-card:nth-child(3)  { animation-delay: 0.09s; }
+        .job-card:nth-child(4)  { animation-delay: 0.12s; }
+        .job-card:nth-child(5)  { animation-delay: 0.15s; }
+        .job-card:nth-child(6)  { animation-delay: 0.18s; }
+        .job-card:nth-child(7)  { animation-delay: 0.21s; }
+        .job-card:nth-child(8)  { animation-delay: 0.24s; }
+        .job-card:nth-child(9)  { animation-delay: 0.27s; }
+        .job-card:nth-child(10) { animation-delay: 0.30s; }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+         HERO / HEADER
+         ============================================================ -->
+    <!-- ============================================================
+         HERO / HEADER
+         ============================================================ -->
+    <header class="hero">
+        <div class="student-badge">🎓 Student Project &nbsp;•&nbsp; Python Data Pipeline</div>
+        <h1>JobPulse <span class="gradient-text">Launchpad</span></h1>
+        
+        <div class="dynamic-sub-bar">
+            <span class="pulse-dot"></span>
+            <span>Real-Time API Ingestion &nbsp;•&nbsp; Automated Cleaning &nbsp;•&nbsp; Smart Match</span>
+        </div>
+        <p class="hero-tagline">Explore curated tech &amp; business career opportunities from live REST API feeds.</p>
+    </header>
+
+    <!-- ============================================================
+         MAIN CONTENT & PLATFORM OVERVIEW
+         ============================================================ -->
+    <main>
+        {% if error_message %}
+            <!-- CASE 1: Something went wrong or no jobs returned -->
+            <div class="empty-state">
+                <div class="icon">😔</div>
+                <h3>Oops, no jobs right now</h3>
+                <p>{{ error_message }}</p>
+            </div>
+        {% else %}
+            <!-- PLATFORM OVERVIEW SECTION (Show before job grid) -->
+            <section class="platform-overview">
+                <div class="overview-header">
+                    <h2>Platform Capabilities</h2>
+                    <p>Designed by a CS student to ingest, clean, and standardize live API listings.</p>
+                </div>
+                <div class="feature-cards">
+                    <div class="feature-card">
+                        <div class="feature-icon">🌐</div>
+                        <h3>Multi-Source Pipeline</h3>
+                        <p>Aggregates live job feeds from Remotive &amp; Arbeitnow REST APIs using Python requests.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🧹</div>
+                        <h3>Automated Cleaning</h3>
+                        <p>Normalizes 80+ raw tags into 8 clear, structured categories for effortless browsing.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Smart Instant Search</h3>
+                        <p>High-performance client-side filtering with developer &amp; engineer synonym support.</p>
+                    </div>
+                </div>
+                <div class="action-bar">
+                    <a href="#jobsSection" class="btn-primary">Explore Live Listings ↓</a>
+                </div>
+            </section>
+
+            <!-- TOOLBAR & JOB LISTINGS -->
+            <div class="toolbar" id="jobsSection">
+                <div class="search-box">
+                    <input type="text"
+                           id="searchInput"
+                           placeholder="Search jobs by title, company, or location…"
+                           autocomplete="off">
+                </div>
+
+                <select id="categoryFilter" class="filter-select">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat }}">{{ cat }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- JOB CARDS GRID -->
+            <div class="job-grid" id="jobGrid">
+                {% for job in jobs %}
+                    <div class="job-card"
+                         data-title="{{ job.title | lower }}"
+                         data-company="{{ job.company | lower }}"
+                         data-location="{{ job.location | lower }}"
+                         data-category="{{ job.category }}">
+
+                        <!-- Card header: logo + title + company -->
+                        <div class="card-header">
+                            {% if job.logo %}
+                                <img src="{{ job.logo }}"
+                                     alt="{{ job.company }}"
+                                     class="company-logo"
+                                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                                <div class="logo-placeholder" style="display:none;">
+                                    {{ job.company[0] }}
+                                </div>
+                            {% else %}
+                                <div class="logo-placeholder">
+                                    {{ job.company[0] }}
+                                </div>
+                            {% endif %}
+                            <div class="card-header-text">
+                                <h2>{{ job.title }}</h2>
+                                <div class="company-name">{{ job.company }}</div>
+                            </div>
+                        </div>
+
+                        <!-- Tags: category, job type, location -->
+                        <div class="tags-row">
+                            {% if job.category %}
+                                <span class="tag tag-category">{{ job.category }}</span>
+                            {% endif %}
+                            {% if job.job_type %}
+                                <span class="tag tag-type">{{ job.job_type }}</span>
+                            {% endif %}
+                            <span class="tag tag-location">📍 {{ job.location }}</span>
+                        </div>
+
+                        <!-- Salary (if available) -->
+                        {% if job.salary %}
+                            <div class="salary">💰 {{ job.salary }}</div>
+                        {% endif %}
+
+                        <!-- Footer: date + apply button -->
+                        <div class="card-footer">
+                            {% if job.pub_date %}
+                                <span class="pub-date">
+                                    📅 {{ job.pub_date[:10] }}
+                                </span>
+                            {% else %}
+                                <span class="pub-date"></span>
+                            {% endif %}
+
+                            <a href="{{ job.url }}"
+                               class="apply-link"
+                               target="_blank"
+                               rel="noopener noreferrer">
+                                Apply
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <!-- Shown by JS when search/filter matches nothing -->
+                <div class="no-filter-results" id="noResults">
+                    <div class="icon">🔍</div>
+                    <p>No jobs match your search. Try a different keyword or category.</p>
+                </div>
+            </div>
+        {% endif %}
+    </main>
+
+    <!-- ============================================================
+         FOOTER
+         ============================================================ -->
+    <footer class="footer">
+        Student Data Ingestion Demo &nbsp;•&nbsp; Built with Flask &amp; Python &nbsp;•&nbsp; Data sourced from
+        <a href="https://remotive.com" target="_blank" rel="noopener noreferrer">Remotive</a>
+        &amp;
+        <a href="https://www.arbeitnow.com" target="_blank" rel="noopener noreferrer">Arbeitnow</a>
+    </footer>
+
+    <!-- ============================================================
+         JAVASCRIPT — Client-side search & filter
+         ============================================================
+
+         WHY client-side?  The jobs are already loaded on the page. Instead
+         of making a new request to the server every time the user types,
+         we just show/hide the cards with JavaScript. This is faster and
+         simpler. No extra Python code needed.
+    -->
+    <script>
+        // Get references to the HTML elements we need
+        var searchInput    = document.getElementById("searchInput");
+        var categoryFilter = document.getElementById("categoryFilter");
+        var noResults      = document.getElementById("noResults");
+
+        // Get all job cards as an array
+        var cards = [];
+        var cardElements = document.getElementsByClassName("job-card");
+        for (var i = 0; i < cardElements.length; i++) {
+            cards.push(cardElements[i]);
+        }
+
+        // This function runs every time the user types or changes the filter.
+        // It loops through every card and checks if it matches the search
+        // text AND the selected category.
+        function filterJobs() {
+            // Get the search text, converted to lowercase for case-insensitive matching
+            var searchText = searchInput.value.toLowerCase().trim();
+
+            // Get the selected category (empty string means "All")
+            var selectedCategory = categoryFilter.value;
+
+            var visibleCount = 0;
+
+            // Loop through every job card
+            for (var i = 0; i < cards.length; i++) {
+                var card = cards[i];
+
+                // Read the data attributes we put on each card
+                var title    = card.getAttribute("data-title");
+                var company  = card.getAttribute("data-company");
+                var location = card.getAttribute("data-location");
+                var category = card.getAttribute("data-category");
+
+                // Check 1: Smart multi-word search + developer/engineer synonym matching
+                var matchesSearch = true;
+                if (searchText) {
+                    var searchableText = (title + " " + company + " " + location + " " + category).toLowerCase();
+                    var terms = searchText.split(/\s+/).filter(Boolean);
+                    matchesSearch = terms.every(function(term) {
+                        if (searchableText.indexOf(term) !== -1) return true;
+                        if (term === "developer" && searchableText.indexOf("engineer") !== -1) return true;
+                        if (term === "engineer" && searchableText.indexOf("developer") !== -1) return true;
+                        return false;
+                    });
+                }
+
+                // Check 2: Does the category match (or is "All" selected)?
+                var matchesCategory = true;
+                if (selectedCategory) {
+                    matchesCategory = (category === selectedCategory);
+                }
+
+                // Show the card only if BOTH checks pass
+                if (matchesSearch && matchesCategory) {
+                    card.style.display = "flex";
+                    visibleCount++;
+                } else {
+                    card.style.display = "none";
+                }
+            }
+
+            // Show "no results" message if nothing matches
+            if (noResults) {
+                noResults.style.display = (visibleCount === 0) ? "block" : "none";
+            }
+        }
+
+        // Listen for user input on the search box and dropdown.
+        // "input" fires on every keystroke; "change" fires when the
+        // dropdown selection changes.
+        if (searchInput)    { searchInput.addEventListener("input", filterJobs); }
+        if (categoryFilter) { categoryFilter.addEventListener("change", filterJobs); }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+# =============================================================================
+# requirements.txt — Python packages this project depends on
+# =============================================================================
+# WHAT: This file lists every external library our app needs.
+# WHY:  When you (or Render) run "pip install -r requirements.txt", Python
+#       automatically downloads and installs these exact libraries.
+#
+# We only need THREE packages — keeping things minimal on purpose:
+#   - Flask:     the web framework (serves our page)
+#   - requests:  the HTTP library (fetches data from Remotive)
+#   - gunicorn:  a production web server (Render uses this instead of
+#                Flask's built-in dev server, which isn't safe for real use)
+# =============================================================================
+
+Flask==3.1.1
+requests==2.32.3
+gunicorn==23.0.0
