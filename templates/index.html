@@ -584,17 +584,10 @@
         .job-card:nth-child(7)  { animation-delay: 0.21s; }
         .job-card:nth-child(8)  { animation-delay: 0.24s; }
         .job-card:nth-child(9)  { animation-delay: 0.27s; }
-        .job-card:nth-child(10) { animation-delay: 0.30s; }
     </style>
 </head>
 <body>
 
-    <!-- ============================================================
-         HERO / HEADER
-         ============================================================ -->
-    <!-- ============================================================
-         HERO / HEADER
-         ============================================================ -->
     <header class="hero">
         <h1>JobPulse <span class="gradient-text">Launchpad</span></h1>
         
@@ -605,19 +598,14 @@
         <p class="hero-tagline">Explore curated tech &amp; business career opportunities from live REST API feeds.</p>
     </header>
 
-    <!-- ============================================================
-         MAIN CONTENT & PLATFORM OVERVIEW
-         ============================================================ -->
     <main>
         {% if error_message %}
-            <!-- CASE 1: Something went wrong or no jobs returned -->
             <div class="empty-state">
                 <div class="icon">😔</div>
                 <h3>Oops, no jobs right now</h3>
                 <p>{{ error_message }}</p>
             </div>
         {% else %}
-            <!-- PLATFORM OVERVIEW SECTION (Show before job grid) -->
             <section class="platform-overview">
                 <div class="overview-header">
                     <h2>Platform Capabilities</h2>
@@ -645,7 +633,6 @@
                 </div>
             </section>
 
-            <!-- TOOLBAR & JOB LISTINGS -->
             <div class="toolbar" id="jobsSection">
                 <div class="search-box">
                     <input type="text"
@@ -662,16 +649,14 @@
                 </select>
             </div>
 
-            <!-- JOB CARDS GRID -->
             <div class="job-grid" id="jobGrid">
                 {% for job in jobs %}
                     <div class="job-card"
-                         data-title="{{ job.title | lower }}"
-                         data-company="{{ job.company | lower }}"
-                         data-location="{{ job.location | lower }}"
-                         data-category="{{ job.category }}">
+                          data-title="{{ job.title | lower }}"
+                          data-company="{{ job.company | lower }}"
+                          data-location="{{ job.location | lower }}"
+                          data-category="{{ job.category }}">
 
-                        <!-- Card header: logo + title + company -->
                         <div class="card-header">
                             {% if job.logo %}
                                 <img src="{{ job.logo }}"
@@ -692,7 +677,6 @@
                             </div>
                         </div>
 
-                        <!-- Tags: category, job type, location -->
                         <div class="tags-row">
                             {% if job.category %}
                                 <span class="tag tag-category">{{ job.category }}</span>
@@ -703,12 +687,10 @@
                             <span class="tag tag-location">📍 {{ job.location }}</span>
                         </div>
 
-                        <!-- Salary (if available) -->
                         {% if job.salary %}
                             <div class="salary">💰 {{ job.salary }}</div>
                         {% endif %}
 
-                        <!-- Footer: date + apply button -->
                         <div class="card-footer">
                             {% if job.pub_date %}
                                 <span class="pub-date">
@@ -728,7 +710,6 @@
                     </div>
                 {% endfor %}
 
-                <!-- Shown by JS when search/filter matches nothing -->
                 <div class="no-filter-results" id="noResults">
                     <div class="icon">🔍</div>
                     <p>No jobs match your search. Try a different keyword or category.</p>
@@ -737,9 +718,6 @@
         {% endif %}
     </main>
 
-    <!-- ============================================================
-         FOOTER
-         ============================================================ -->
     <footer class="footer">
         Built with Flask &amp; Python &nbsp;•&nbsp; Data sourced from
         <a href="https://remotive.com" target="_blank" rel="noopener noreferrer">Remotive</a>
@@ -747,15 +725,6 @@
         <a href="https://www.arbeitnow.com" target="_blank" rel="noopener noreferrer">Arbeitnow</a>
     </footer>
 
-    <!-- ============================================================
-         JAVASCRIPT — Client-side search & filter
-         ============================================================
-
-         WHY client-side?  The jobs are already loaded on the page. Instead
-         of making a new request to the server every time the user types,
-         we just show/hide the cards with JavaScript. This is faster and
-         simpler. No extra Python code needed.
-    -->
     <script>
         var searchInput    = document.getElementById("searchInput");
         var categoryFilter = document.getElementById("categoryFilter");
