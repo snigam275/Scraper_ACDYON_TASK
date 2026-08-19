@@ -90,9 +90,9 @@
         }
 
         .filter-btn-saved.active {
-            background: #ef4444;
+            background: #d97706;
             color: #ffffff;
-            border-color: #dc2626;
+            border-color: #b45309;
         }
 
         .filter-btn-clear {
@@ -619,7 +619,7 @@
         
         <div class="dynamic-sub-bar">
             <span class="pulse-dot"></span>
-            <span>Real-Time API Ingestion &nbsp;•&nbsp; Automated Cleaning &nbsp;•&nbsp; Smart Match</span>
+            <span>Real-Time API Ingestion &nbsp;•&nbsp; Smart Taxonomy &nbsp;•&nbsp; Smart Match</span>
         </div>
         <p class="hero-tagline">Explore curated tech &amp; business career opportunities from live job feeds.</p>
     </header>
@@ -645,7 +645,7 @@
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon">🧹</div>
-                        <h3>Automated Cleaning</h3>
+                        <h3>Smart Taxonomy</h3>
                         <p>Normalizes 80+ raw tags into 8 clear, structured categories for effortless browsing.</p>
                     </div>
                     <div class="feature-card">
@@ -674,7 +674,7 @@
                     {% endfor %}
                 </select>
 
-                <button id="savedOnlyFilter" class="filter-btn-saved" onclick="toggleSavedFilter()">❤️ Saved (<span id="savedCount">0</span>)</button>
+                <button id="savedOnlyFilter" class="filter-btn-saved" onclick="toggleSavedFilter()">⭐ Starred (<span id="savedCount">0</span>)</button>
                 <button id="clearFiltersBtn" class="filter-btn-clear" onclick="clearAllFilters()" style="display:none;">✕ Clear</button>
             </div>
 
@@ -705,7 +705,7 @@
                                 <h2>{{ job.title }}</h2>
                                 <div class="company-name">{{ job.company }}</div>
                             </div>
-                            <button class="bookmark-btn" onclick="toggleBookmark(event, '{{ job.url }}')" data-url="{{ job.url }}" title="Save Job">🤍</button>
+                            <button class="bookmark-btn" onclick="toggleBookmark(event, '{{ job.url }}')" data-url="{{ job.url }}" title="Star Job">☆</button>
                         </div>
 
                         <div class="tags-row">
@@ -814,7 +814,7 @@
                 var url = card.getAttribute("data-url");
                 var btn = card.querySelector(".bookmark-btn");
                 if (btn) {
-                    btn.innerText = (saved.indexOf(url) !== -1) ? "❤️" : "🤍";
+                    btn.innerText = (saved.indexOf(url) !== -1) ? "⭐" : "☆";
                 }
             }
         }
