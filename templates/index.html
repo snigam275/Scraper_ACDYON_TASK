@@ -18,26 +18,26 @@
         }
 
         :root {
-            /* 1. Creamish Yellow Base */
-            --bg-body: #fffdf5;          /* Lightest creamish yellow background */
-            --bg-card: #ffffff;          /* Crisp white card surface */
+            --bg-body: #fffdf5;
+            --bg-card: #ffffff;
             --bg-card-hover: #ffffff;
             --bg-input: #ffffff;
-            --border-cream: #f3ead3;     /* Warm cream border */
+            --border-cream: #f3ead3;
+            --border: #f3ead3;
 
-            /* 2. Greenish Accents */
-            --green-primary: #059669;   /* Emerald green */
-            --green-light: #10b981;     /* Vibrant mint green */
-            --green-bg: #ecfdf5;        /* Light emerald green tint */
+            --green-primary: #059669;
+            --green-light: #10b981;
+            --green: #059669;
+            --green-bg: #ecfdf5;
             --green-border: #a7f3d0;
 
-            /* 3. Blueish Primary & Text */
-            --text-primary: #0f172a;    /* Deep slate navy for main text */
-            --text-secondary: #475569;  /* Elegant slate secondary text */
-            --text-dim: #64748b;        /* Muted slate text */
-            --blue-primary: #0284c7;    /* Oceanic blue for buttons & links */
-            --blue-light: #38bdf8;      /* Sky blue accent */
-            --blue-bg: #e0f2fe;         /* Light sky blue tint */
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-dim: #64748b;
+            --blue-primary: #0284c7;
+            --blue: #0284c7;
+            --blue-light: #38bdf8;
+            --blue-bg: #e0f2fe;
             --blue-border: #bae6fd;
 
             --radius: 16px;
@@ -53,7 +53,6 @@
             color: var(--text-primary);
             line-height: 1.6;
             min-height: 100vh;
-            /* Tri-color ambient background pattern: Creamish Yellow + Greenish + Blueish */
             background-image:
                 radial-gradient(ellipse 80% 60% at 50% -20%, rgba(254, 240, 138, 0.55), transparent),
                 radial-gradient(ellipse 60% 50% at 90% 70%, rgba(209, 250, 229, 0.5), transparent),
@@ -61,27 +60,11 @@
             background-attachment: fixed;
         }
 
-        /* --- HERO / HEADER SECTION --- */
         .hero {
             text-align: center;
             padding: 3.5rem 1.5rem 1.5rem;
             max-width: 850px;
             margin: 0 auto;
-        }
-
-        /* Student attribution badge */
-        .student-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            background: var(--green-bg);
-            color: var(--green-primary);
-            border: 1px solid var(--green-border);
-            font-size: 0.8rem;
-            font-weight: 600;
-            padding: 0.35rem 0.9rem;
-            border-radius: 100px;
-            margin-bottom: 1rem;
         }
 
         .hero h1 {
@@ -93,7 +76,6 @@
             color: var(--text-primary);
         }
 
-        /* Gradient text effect: Greenish -> Blueish */
         .gradient-text {
             background: linear-gradient(135deg, var(--green-primary) 0%, var(--blue-primary) 100%);
             -webkit-background-clip: text;
@@ -101,7 +83,6 @@
             background-clip: text;
         }
 
-        /* 1-Line Dynamic Subtitle Badge */
         .dynamic-sub-bar {
             display: inline-flex;
             align-items: center;
@@ -142,7 +123,6 @@
             text-overflow: ellipsis;
         }
 
-        /* --- PLATFORM OVERVIEW SECTION (Show before listings) --- */
         .platform-overview {
             max-width: 1100px;
             margin: 1rem auto 2rem;
@@ -229,7 +209,6 @@
             box-shadow: 0 6px 24px rgba(5, 150, 105, 0.35);
         }
 
-        /* --- TOOLBAR (Search + Filter) --- */
         .toolbar {
             max-width: 1100px;
             margin: 1.5rem auto 0;
@@ -279,7 +258,6 @@
             color: var(--text-dim);
         }
 
-        /* Category filter dropdown */
         .filter-select {
             padding: 0.75rem 1rem;
             background: var(--bg-input);
@@ -305,7 +283,6 @@
             padding: 0.5rem;
         }
 
-        /* --- JOB GRID --- */
         .job-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -315,7 +292,6 @@
             padding: 0 1.5rem 3rem;
         }
 
-        /* --- JOB CARD --- */
         .job-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
@@ -340,7 +316,6 @@
             background: var(--bg-card-hover);
         }
 
-        /* Top edge accent gradient: Yellowish Gold -> Emerald Green -> Oceanic Blue */
         .job-card::before {
             content: "";
             position: absolute;
@@ -357,7 +332,6 @@
             opacity: 1;
         }
 
-        /* Top row: logo + title + company */
         .card-header {
             display: flex;
             gap: 0.85rem;
@@ -408,7 +382,6 @@
             margin-top: 0.15rem;
         }
 
-        /* Tags row */
         .tags-row {
             display: flex;
             flex-wrap: wrap;
@@ -441,14 +414,12 @@
             border: 1px solid #fef08a;
         }
 
-        /* Salary row */
         .salary {
             font-size: 0.88rem;
             font-weight: 700;
             color: #b45309;
         }
 
-        /* Bottom row: date + apply button */
         .card-footer {
             display: flex;
             justify-content: space-between;
@@ -488,7 +459,6 @@
             transform: translateY(-1px);
         }
 
-        /* Arrow icon */
         .apply-link::after {
             content: "→";
             transition: transform var(--transition);
@@ -498,7 +468,6 @@
             transform: translateX(3px);
         }
 
-        /* --- "NO RESULTS" MESSAGE --- */
         .empty-state {
             text-align: center;
             padding: 4rem 1.5rem;
@@ -535,7 +504,6 @@
             margin-bottom: 0.5rem;
         }
 
-        /* --- FOOTER --- */
         .footer {
             text-align: center;
             padding: 1.5rem;
@@ -554,7 +522,6 @@
             text-decoration: underline;
         }
 
-        /* --- RESPONSIVE --- */
         @media (max-width: 500px) {
             .hero h1  { font-size: 1.8rem; }
             .toolbar  { flex-direction: column; }
@@ -562,8 +529,6 @@
             .job-count { margin-left: 0; }
         }
 
-        /* --- FADE-IN ANIMATION --- */
-        /* Cards slide up and fade in when the page loads */
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(18px); }
             to   { opacity: 1; transform: translateY(0); }
@@ -573,8 +538,6 @@
             animation: fadeInUp 0.5s ease both;
         }
 
-        /* Stagger the animation: each card starts slightly later.
-           We use nth-child to give each card a different delay. */
         .job-card:nth-child(1)  { animation-delay: 0.03s; }
         .job-card:nth-child(2)  { animation-delay: 0.06s; }
         .job-card:nth-child(3)  { animation-delay: 0.09s; }
