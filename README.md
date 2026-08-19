@@ -16,7 +16,7 @@ Built as a CS student project demo focusing on clean code, robust API handling, 
 
 | Feature | Technical Implementation |
 | :--- | :--- |
-| **Multi-Source Ingestion** | Ingests live listings concurrently from **Remotive** and **Arbeitnow** REST APIs. |
+| **Multi-Source Ingestion** | Ingests live listings concurrently from **Remotive** and **Arbeitnow** public APIs. |
 | **Data Normalization** | Standardizes 80+ raw API tags into 8 clean, meaningful career categories in Python. |
 | **Smart Search & Synonyms** | Client-side multi-term matching with built-in `developer` ↔ `engineer` synonym support. |
 | **In-Memory Caching** | 300-second (5-minute) cache TTL to reduce API load and eliminate rate limits. |
