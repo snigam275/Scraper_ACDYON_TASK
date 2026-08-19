@@ -42,66 +42,10 @@ ACDYON/
 ├── .gitignore            ← Excludes venv, __pycache__, IDE configs
 └── README.md             ← Project documentation
 ```
-
----
-
-## 🚀 How to Run Locally
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/snigam275/Scraper_ACDYON_TASK.git
-cd Scraper_ACDYON_TASK
-```
-
-### 2. Create & Activate Virtual Environment
-
-```bash
-# Windows
-python -m venv venv
-venv\Scripts\activate
-
-# Mac/Linux
-python -m venv venv
-source venv/bin/activate
-```
-
-### 3. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Launch Application Server
-
-```bash
-python app.py
-```
-
-Open your browser and navigate to **http://127.0.0.1:5000** to explore the dashboard.
-
----
-
-## 🌐 Deploying to Render (Free Tier)
-
-1. Create a Web Service on [Render.com](https://render.com).
-2. Connect your GitHub repository `https://github.com/snigam275/Scraper_ACDYON_TASK`.
-3. Set the following build options:
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `gunicorn app:app`
-   - **Runtime**: `Python 3`
-
----
-
-## 👨‍💻 Student Project Demonstration Notes
+## 👨‍💻 Project Demonstration Notes
 
 This project demonstrates core data engineering & web development principles:
 - **API Rate Limiting Prevention**: Through in-memory caching and random request delay pacing.
 - **Data Normalization Engine**: Python mapping function that converts messy external tags into unified taxonomy.
 - **Client-Side UX**: Filtering jobs in memory without triggering server re-fetches for instant responsiveness.
 
----
-
-## 📜 License
-
-Distributed under the MIT License. Feel free to use and extend!
