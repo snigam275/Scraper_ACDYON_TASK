@@ -1,43 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!--
-        WHAT: This is the HTML template for our job listings page.
-        WHY:  Flask uses Jinja2 templating — we write normal HTML but can
-              insert Python data using special double-brace and tag syntax.
-    -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remote Job Listings — Live Feed</title>
-    <meta name="description" content="Browse live remote job listings from Remotive — search, filter by category, and apply directly.">
+    <title>JobPulse Launchpad — Real-Time Job Ingestion Board</title>
+    <meta name="description" content="Browse live job listings from Remotive & Arbeitnow APIs — search, filter by category, and apply directly.">
 
-    <!--
-        WHY Google Fonts?  The default browser font (Times New Roman) looks
-        dated. "Inter" is a clean, modern, free font that's easy to read.
-    -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* ================================================================
-           CSS STYLES — all in one place for simplicity
-           ================================================================ */
-
-        /* --- RESET & BASE --- */
         *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* --- ROOT VARIABLES (Design Tokens) --- */
-        /* WHY: Define all colors/sizes once. Change a variable here and it
-           updates the entire page automatically. */
-        /* --- ROOT VARIABLES (Design Tokens) --- */
-        /* --- ROOT VARIABLES (Design Tokens) --- */
-        /* Theme: Light Creamish Yellow (lightest shade of yellow+white) + Greenish + Blueish */
-        /* --- ROOT VARIABLES (Strict 3 Colors: Creamish Yellow + Greenish + Blueish) --- */
         :root {
             /* 1. Creamish Yellow Base */
             --bg-body: #fffdf5;          /* Lightest creamish yellow background */
@@ -779,41 +758,28 @@
          simpler. No extra Python code needed.
     -->
     <script>
-        // Get references to the HTML elements we need
         var searchInput    = document.getElementById("searchInput");
         var categoryFilter = document.getElementById("categoryFilter");
         var noResults      = document.getElementById("noResults");
 
-        // Get all job cards as an array
         var cards = [];
         var cardElements = document.getElementsByClassName("job-card");
         for (var i = 0; i < cardElements.length; i++) {
             cards.push(cardElements[i]);
         }
 
-        // This function runs every time the user types or changes the filter.
-        // It loops through every card and checks if it matches the search
-        // text AND the selected category.
         function filterJobs() {
-            // Get the search text, converted to lowercase for case-insensitive matching
             var searchText = searchInput.value.toLowerCase().trim();
-
-            // Get the selected category (empty string means "All")
             var selectedCategory = categoryFilter.value;
-
             var visibleCount = 0;
 
-            // Loop through every job card
             for (var i = 0; i < cards.length; i++) {
                 var card = cards[i];
-
-                // Read the data attributes we put on each card
                 var title    = card.getAttribute("data-title");
                 var company  = card.getAttribute("data-company");
                 var location = card.getAttribute("data-location");
                 var category = card.getAttribute("data-category");
 
-                // Check 1: Smart multi-word search + developer/engineer synonym matching
                 var matchesSearch = true;
                 if (searchText) {
                     var searchableText = (title + " " + company + " " + location + " " + category).toLowerCase();
@@ -826,13 +792,11 @@
                     });
                 }
 
-                // Check 2: Does the category match (or is "All" selected)?
                 var matchesCategory = true;
                 if (selectedCategory) {
                     matchesCategory = (category === selectedCategory);
                 }
 
-                // Show the card only if BOTH checks pass
                 if (matchesSearch && matchesCategory) {
                     card.style.display = "flex";
                     visibleCount++;
@@ -841,15 +805,11 @@
                 }
             }
 
-            // Show "no results" message if nothing matches
             if (noResults) {
                 noResults.style.display = (visibleCount === 0) ? "block" : "none";
             }
         }
 
-        // Listen for user input on the search box and dropdown.
-        // "input" fires on every keystroke; "change" fires when the
-        // dropdown selection changes.
         if (searchInput)    { searchInput.addEventListener("input", filterJobs); }
         if (categoryFilter) { categoryFilter.addEventListener("change", filterJobs); }
     </script>
