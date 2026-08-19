@@ -47,25 +47,6 @@
             --transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        /* --- DARK MODE THEME OVERRIDES --- */
-        [data-theme="dark"] {
-            --bg-body: #0b1329;
-            --bg-card: #1e293b;
-            --bg-card-hover: #1e293b;
-            --bg-input: #1e293b;
-            --border-cream: #334155;
-            --border: #334155;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --text-dim: #64748b;
-            --blue-bg: #0369a1;
-            --blue-border: #0284c7;
-            --green-bg: #064e3b;
-            --green-border: #059669;
-            --shadow-card: 0 8px 30px rgba(0, 0, 0, 0.3);
-            --shadow-hover: 0 16px 40px rgba(2, 132, 199, 0.25);
-        }
-
         body {
             font-family: 'Inter', -apple-system, sans-serif;
             background: var(--bg-body);
@@ -77,40 +58,6 @@
                 radial-gradient(ellipse 60% 50% at 90% 70%, rgba(209, 250, 229, 0.5), transparent),
                 radial-gradient(ellipse 60% 50% at 10% 40%, rgba(224, 242, 254, 0.5), transparent);
             background-attachment: fixed;
-            transition: background var(--transition), color var(--transition);
-        }
-
-        [data-theme="dark"] body {
-            background-image:
-                radial-gradient(ellipse 80% 60% at 50% -20%, rgba(30, 41, 59, 0.7), transparent),
-                radial-gradient(ellipse 60% 50% at 90% 70%, rgba(6, 78, 59, 0.3), transparent),
-                radial-gradient(ellipse 60% 50% at 10% 40%, rgba(3, 105, 161, 0.3), transparent);
-        }
-
-        .top-nav {
-            display: flex;
-            justify-content: flex-end;
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 1rem 1.5rem 0;
-        }
-
-        .theme-toggle-btn {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            padding: 0.45rem 1rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: var(--shadow-card);
-            transition: transform var(--transition), background var(--transition), border-color var(--transition);
-        }
-
-        .theme-toggle-btn:hover {
-            transform: translateY(-2px);
-            border-color: var(--blue-primary);
         }
 
         .bookmark-btn {
@@ -667,10 +614,6 @@
 </head>
 <body>
 
-    <div class="top-nav">
-        <button id="themeToggleBtn" class="theme-toggle-btn" onclick="toggleTheme()">🌙 Dark Mode</button>
-    </div>
-
     <header class="hero">
         <h1>JobPulse <span class="gradient-text">Launchpad</span></h1>
         
@@ -822,7 +765,6 @@
         var searchInput      = document.getElementById("searchInput");
         var categoryFilter   = document.getElementById("categoryFilter");
         var noResults        = document.getElementById("noResults");
-        var themeToggleBtn   = document.getElementById("themeToggleBtn");
         var savedOnlyFilter  = document.getElementById("savedOnlyFilter");
         var clearFiltersBtn  = document.getElementById("clearFiltersBtn");
         var loadMoreBtn      = document.getElementById("loadMoreBtn");
@@ -903,24 +845,6 @@
             visibleLimit += 18;
             filterJobs();
         }
-
-        function toggleTheme() {
-            var currentTheme = document.documentElement.getAttribute("data-theme");
-            var newTheme = (currentTheme === "dark") ? "light" : "dark";
-            document.documentElement.setAttribute("data-theme", newTheme);
-            localStorage.setItem("theme", newTheme);
-            if (themeToggleBtn) {
-                themeToggleBtn.innerText = (newTheme === "dark") ? "☀️ Light Mode" : "🌙 Dark Mode";
-            }
-        }
-
-        (function initTheme() {
-            var savedTheme = localStorage.getItem("theme");
-            if (savedTheme === "dark") {
-                document.documentElement.setAttribute("data-theme", "dark");
-                if (themeToggleBtn) themeToggleBtn.innerText = "☀️ Light Mode";
-            }
-        })();
 
         function filterJobs() {
             var searchText = searchInput ? searchInput.value.toLowerCase().trim() : "";
